@@ -18,7 +18,7 @@ pipeline {
     }
     stage('Construir Docker') {
       steps {
-        sh 'docker build -t TechFlow-api .'
+        sh 'docker build -t techflow-api .'
       }
     }
   }
