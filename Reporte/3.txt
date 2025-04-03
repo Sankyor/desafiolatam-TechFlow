@@ -1,0 +1,137 @@
+Started by user Mauricio Jesús M
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/techflow
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Clonar Repo)
+[Pipeline] git
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/techflow/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Sankyor/desafiolatam-TechFlow.git # timeout=10
+Fetching upstream changes from https://github.com/Sankyor/desafiolatam-TechFlow.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://github.com/Sankyor/desafiolatam-TechFlow.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 884e9e5e88104e74c6493829d5ebdff864a18317 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 884e9e5e88104e74c6493829d5ebdff864a18317 # timeout=10
+ > git branch -a -v --no-abbrev # timeout=10
+ > git branch -D main # timeout=10
+ > git checkout -b main 884e9e5e88104e74c6493829d5ebdff864a18317 # timeout=10
+Commit message: "fix:(stable-v2)"
+ > git rev-list --no-walk 884e9e5e88104e74c6493829d5ebdff864a18317 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Instalar Dependencias)
+[Pipeline] sh
++ npm install
+
+up to date, audited 356 packages in 800ms
+
+48 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Pruebas)
+[Pipeline] sh
++ npm run test
+
+> ci_pipeline_project@1.0.0 test
+> jest
+
+PASS tests/app.test.js
+  API Tests
+    ✓ should return a list of users (19 ms)
+    ✓ should return a single user (3 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       2 passed, 2 total
+Snapshots:   0 total
+Time:        0.295 s, estimated 1 s
+Ran all test suites.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Construir Docker)
+[Pipeline] sh
++ docker build -t techflow-api .
+#1 [internal] load build definition from Dockerfile
+#1 sha256:e108b7933a2fb572ab3810dfb6235e62b259c0cd72112683b9dd6745e76693c1
+#1 transferring dockerfile: 327B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:16
+#2 sha256:fd5b82f8ae0df89e9cd72a9d8467742883c141b984c3590a2cfc37e2f1c30dbf
+#2 DONE 1.4s
+
+#3 [internal] load .dockerignore
+#3 sha256:18f105ab840d1d69e7c2d9fcca50c729599e21ed04dd95153e4cd35550d10775
+#3 transferring context: 53B done
+#3 DONE 0.0s
+
+#9 [1/5] FROM docker.io/library/node:16@sha256:f77a1aef2da8d83e45ec990f45df50f1a286c5fe8bbfb8c6e4246c6389705c0b
+#9 sha256:bb27f93c1c24294fde1ab2ba5a6f99a72bf2953e6aa50d0fa5079b77bbb20eff
+#9 resolve docker.io/library/node:16@sha256:f77a1aef2da8d83e45ec990f45df50f1a286c5fe8bbfb8c6e4246c6389705c0b 0.0s done
+#9 DONE 0.0s
+
+#7 [internal] load build context
+#7 sha256:b8aab0b0382b2129301f0120d0632d0233de076160137122c90b9bc7d55a784c
+#7 transferring context: 259.50kB 0.0s done
+#7 DONE 0.1s
+
+#8 [2/5] WORKDIR /usr/src/app
+#8 sha256:1c7cf5afd598838cb5f11717a1ec517e54d2bf03451752119f1d9bfbcc003aef
+#8 CACHED
+
+#6 [3/5] COPY package.json ./
+#6 sha256:5eb07919a7f6eae9c2930d6af1f24c36e8c712451e36e7ce0d2180262504769e
+#6 DONE 0.0s
+
+#5 [4/5] RUN npm install
+#5 sha256:24b5ad07df20b1248de91193dfc9014c9f0be4e73922850989b07af9a867b607
+#5 15.03 npm WARN deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+#5 15.27 npm WARN deprecated superagent@8.1.2: Please upgrade to v9.0.0+ as we have fixed a public vulnerability with formidable dependency. Note that v9.0.0+ requires Node.js v14.18.0+. See https://github.com/ladjs/superagent/pull/1800 for insight. This project is supported and maintained by the team at Forward Email @ https://forwardemail.net
+#5 15.39 npm WARN deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+#5 16.05 
+#5 16.05 added 355 packages, and audited 356 packages in 15s
+#5 16.05 
+#5 16.05 48 packages are looking for funding
+#5 16.05   run `npm fund` for details
+#5 16.05 
+#5 16.05 found 0 vulnerabilities
+#5 16.06 npm notice 
+#5 16.06 npm notice New major version of npm available! 8.19.4 -> 11.2.0
+#5 16.06 npm notice Changelog: <https://github.com/npm/cli/releases/tag/v11.2.0>
+#5 16.06 npm notice Run `npm install -g npm@11.2.0` to update!
+#5 16.06 npm notice 
+#5 DONE 16.2s
+
+#4 [5/5] COPY . .
+#4 sha256:9621fa39f31a72ceb9eab75affd94e9c37da3d0009d8abc81bab30a2f5947b5f
+#4 DONE 0.1s
+
+#10 exporting to image
+#10 sha256:a83507448814dfe43dcab4349f7c1f7e606b02c272133df7df09921008701df2
+#10 exporting layers
+#10 exporting layers 2.6s done
+#10 exporting manifest sha256:6fa893d983ab07b11adccec2b2f63f6dcb555b8ab59fa6ab8ad9304797a22149
+#10 exporting manifest sha256:6fa893d983ab07b11adccec2b2f63f6dcb555b8ab59fa6ab8ad9304797a22149 done
+#10 exporting config sha256:397e8d2904721b03a46603f18ceb4ce9ad649aa32a704c714bd7a2fb53e34e45 done
+#10 naming to docker.io/library/techflow-api:latest done
+#10 unpacking to docker.io/library/techflow-api:latest
+#10 unpacking to docker.io/library/techflow-api:latest 3.1s done
+#10 DONE 5.8s
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
